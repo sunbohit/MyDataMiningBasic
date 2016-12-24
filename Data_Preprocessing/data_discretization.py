@@ -77,4 +77,18 @@ w = [0] + list(w[0]) + [dd_data.max()]
 [0, 0.17869758895131088, 0.25772406433683875, 0.35184318136037063, 0.504]
 '''
 d_c = pd.cut(dd_data, w, labels = range(k))
-print(d_c)
+#print(d_c)
+
+#可视化
+import matplotlib.pyplot as  plt
+def cluster_plot(d, k):
+	plt.figure(figsize = (8,3))
+	for j in range(k):
+		plt.plot(dd_data[d==j], [j for i in d[d==j]], 'o')
+	plt.ylim(-0.5,k-0.5)
+	plt.show()
+	return
+cluster_plot(d_w, k)
+cluster_plot(d_f, k)
+cluster_plot(d_c, k)
+	
