@@ -43,4 +43,38 @@ d_f = pd.cut(dd_data, w, labels=range(k))
 #print(d_f)
 
 #聚类离散化
-
+from sklearn.cluster import KMeans
+kmeans_model = KMeans(n_clusters=k)
+#print(dd_data)
+reshape_data = dd_data.values.reshape((len(dd_data),1))
+#print(reshape_data)
+kmeans_model.fit(reshape_data)
+#print(kmeans_model.labels_)
+#c = pd.DataFrame(kmeans_model.labels_)
+#print(c) #所得标签并不符合小标签对应小类的序数关系
+cent = pd.DataFrame(kmeans_model.cluster_centers_).sort_values(0)
+#print(cent)
+'''
+          0
+2  0.136954
+0  0.220441
+1  0.295007
+3  0.408679
+'''
+w = cent.rolling(center=False,window=2).mean()
+#print(w)
+'''
+          0
+2       NaN
+1  0.178698
+3  0.257724
+0  0.351843
+'''
+w = w.iloc[1:]
+w = [0] + list(w[0]) + [dd_data.max()]
+#print(w)
+'''
+[0, 0.17869758895131088, 0.25772406433683875, 0.35184318136037063, 0.504]
+'''
+d_c = pd.cut(dd_data, w, labels = range(k))
+print(d_c)
