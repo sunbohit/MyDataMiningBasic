@@ -6,4 +6,4 @@ ed_data = pd.read_excel(input_file)
 
 ed_data['线损率'] = (ed_data['供入电量']-ed_data['供出电量'])/ed_data['供入电量']
 
-ed_data.to_excel(output_file)
+ed_data.to_excel(output_file,index=False)
