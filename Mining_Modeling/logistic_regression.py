@@ -3,7 +3,12 @@ import pandas as pd
 #http://scikit-learn.org/stable/modules/feature_selection.html#randomized-sparse-models
 from sklearn.linear_model import RandomizedLogisticRegression
 
+#http://scikit-learn.org/stable/modules/feature_selection.html#rfe
+from sklearn.feature_selection import RFE
+from sklearn.svm import SVR
+
 #http://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+from sklearn.linear_model import LogisticRegression as LogisticRegression
 
 input_file = 'bankloan.xls'
 
@@ -29,7 +34,28 @@ print(randomized_logistic.get_support())
 '''
 [False False  True  True False  True  True False]
 '''
-print('(稳定性选择)有效特征：%s'%','.join(b_data.columns[randomized_logistic.get_support()]))
+print('(稳定性选择)有效特征：%s'%','.join(b_data.columns[:-1][randomized_logistic.get_support()]))
 '''
 (稳定性选择)有效特征：工龄,地址,负债率,信用卡负债
 '''
+feat_1 = b_data[b_data.columns[:-1][randomized_logistic.get_support()]].as_matrix()
+
+estimator = SVR(kernel="linear")
+RFE_selector = RFE(estimator=estimator, n_features_to_select=None, step=1)
+RFE_selector.fit(features,labels)
+print(RFE_selector.support_)
+'''
+[False  True  True False False  True  True False]
+'''
+print(RFE_selector.ranking_)
+'''
+[5 1 1 3 4 1 1 2]
+'''
+print('(递归特征消除)有效特征：%s'%','.join(b_data.columns[:-1][RFE_selector.get_support()]))
+
+'''
+(递归特征消除)有效特征：教育,工龄,负债率,信用卡负债
+'''
+feat_2 = b_data[b_data.columns[:-1][RFE_selector.get_support()]].as_matrix()
+
+
