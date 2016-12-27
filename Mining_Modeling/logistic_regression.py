@@ -58,4 +58,17 @@ print('(递归特征消除)有效特征：%s'%','.join(b_data.columns[:-1][RFE_s
 '''
 feat_2 = b_data[b_data.columns[:-1][RFE_selector.get_support()]].as_matrix()
 
+lr_1 = LogisticRegression()
+lr_1.fit(feat_1,labels)
+print('(稳定性选择)平均正确率为：%s' % lr_1.score(feat_1,labels))
+'''
+(稳定性选择)平均正确率为：0.814285714286
+'''
 
+lr_2 = LogisticRegression()
+lr_2.fit(feat_1,labels)
+print('(递归特征消除)平均正确率为：%s' % lr_2.score(feat_2,labels))
+'''
+(递归特征消除)平均正确率为：0.717142857143
+
+'''
