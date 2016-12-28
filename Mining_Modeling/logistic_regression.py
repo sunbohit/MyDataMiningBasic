@@ -70,5 +70,4 @@ lr_2.fit(feat_1,labels)
 print('(递归特征消除)平均正确率为：%s' % lr_2.score(feat_2,labels))
 '''
 (递归特征消除)平均正确率为：0.717142857143
-
 '''
