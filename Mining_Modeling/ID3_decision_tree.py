@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import export_graphviz
 
 input_file = 'sales_data.xls'
 sd_data = pd.read_excel(input_file, index_col='序号')
@@ -55,7 +57,14 @@ feature = sd_data.iloc[:,:3].as_matrix()
 label = sd_data.iloc[:,3].as_matrix()
 #print(type(feature)) #<class 'numpy.ndarray'>
 #print(type(label)) #<class 'numpy.ndarray'>
+#print(type(label[0])) #<class 'int'>
+label = label.astype(np.int64)
+#print(type(label)) #<class 'numpy.ndarray'>
+#print(type(label[0])) #<class 'numpy.int64'>
 
 dtc = DecisionTreeClassifier(criterion='entropy')
 dtc.fit(feature,label)
+
+#print(sd_data.columns) #Index(['天气', '是否周末', '是否有促销', '销量'], dtype='object')
+export_graphviz(decision_tree = dtc, out_file='sales_data_id3_tree.dot',feature_names=sd_data.columns)
 
