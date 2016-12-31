@@ -89,4 +89,19 @@ Label:    [1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
 [[12  4]
  [ 4 14]]
 '''
+def cm_plot(y, yp):
+  
+  cm = confusion_matrix(y, yp) #混淆矩阵
+  
+  plt.matshow(cm, cmap=plt.cm.Greens) #画混淆矩阵图，配色风格使用cm.Greens，更多风格请参考官网。
+  plt.colorbar() #颜色标签
+  
+  for x in range(len(cm)): #数据标签
+    for y in range(len(cm)):
+      plt.annotate(cm[x,y], xy=(x, y), horizontalalignment='center', verticalalignment='center')
+  
+  plt.ylabel('True label') #坐标轴标签
+  plt.xlabel('Predicted label') #坐标轴标签
+  return plt
 
+cm_plot(label,pred_label).show()
