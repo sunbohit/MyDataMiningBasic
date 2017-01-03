@@ -206,12 +206,12 @@ Id
 
 row2.to_excel(output_file)
 
-def density_plot(data): #自定义作图函数
+def density_plot(data): 
 	p = data.plot(kind='kde', linewidth = 2, subplots = True, sharex = False)
 	[p[i].set_ylabel('密度') for i in range(k)]
 	plt.legend()
 	return plt
 
-pic_output = 'pd_' #概率密度图文件名前缀
+pic_output = 'pd_' 
 for i in range(k):
  	density_plot(cd_data[row2['聚类类别']==i]).savefig('%s%s.png' %(pic_output, i))
