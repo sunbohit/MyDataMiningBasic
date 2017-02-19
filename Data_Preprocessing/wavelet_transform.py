@@ -1,8 +1,11 @@
+'''
+小波变换处理信号
+'''
 from scipy.io import loadmat
 import pywt #sudo pip3 install PyWavelets
 
-inputfile = 'leleccum.mat'
-mat = loadmat(inputfile)
+inputfile = 'leleccum.mat' #提取自matlab的信号文件
+mat = loadmat(inputfile) #scipy载入matlab文件
 print(mat)
 '''
 {'leleccum': array([[ 420.20278994,  423.52653517,  423.52271225, ...,  323.96580997,
@@ -16,7 +19,7 @@ print(signal)
   323.85476049]
 '''
 
-c = pywt.wavedec(signal, 'bior3.7', level=5)
+c = pywt.wavedec(signal, 'bior3.7', level=5) #小波变换
 print(c)
 '''
 [array([ 2415.1478541 ,  2395.74470824,  2402.22022728,  2408.90987352,

@@ -1,15 +1,18 @@
+'''
+连续数据的离散化（多应用与ID3算法、Apriori算法等的预处理）
+'''
 import pandas as pd
 
-datafile = 'discretization_data.xls'
+datafile = 'discretization_data.xls' #数据集
 dd_data = pd.read_excel(datafile)
 #print(dd_data)
 dd_data = dd_data['肝气郁结证型系数'].copy()
 #print(dd_data)
 
-k = 4
+k = 4 #离散为 4 类
 
 #等宽离散化
-d_w = pd.cut(dd_data,k,labels=range(k))
+d_w = pd.cut(dd_data, k, labels=range(k))
 #print(d_w)
 
 #等频离散化
@@ -43,16 +46,16 @@ d_f = pd.cut(dd_data, w, labels=range(k))
 #print(d_f)
 
 #聚类离散化
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans #使用sklearn的kmeans聚类
 kmeans_model = KMeans(n_clusters=k)
 #print(dd_data)
 reshape_data = dd_data.values.reshape((len(dd_data),1))
 #print(reshape_data)
-kmeans_model.fit(reshape_data)
+kmeans_model.fit(reshape_data) #kmeans训练
 #print(kmeans_model.labels_)
 #c = pd.DataFrame(kmeans_model.labels_)
 #print(c) #所得标签并不符合小标签对应小类的序数关系
-cent = pd.DataFrame(kmeans_model.cluster_centers_).sort_values(0)
+cent = pd.DataFrame(kmeans_model.cluster_centers_).sort_values(0) #输出聚类中心并排序
 #print(cent)
 '''
           0
@@ -61,7 +64,7 @@ cent = pd.DataFrame(kmeans_model.cluster_centers_).sort_values(0)
 1  0.295007
 3  0.408679
 '''
-w = cent.rolling(center=False,window=2).mean()
+w = cent.rolling(center=False,window=2).mean() #求相邻两项中点作为边界点
 #print(w)
 '''
           0
@@ -71,7 +74,7 @@ w = cent.rolling(center=False,window=2).mean()
 0  0.351843
 '''
 w = w.iloc[1:]
-w = [0] + list(w[0]) + [dd_data.max()]
+w = [0] + list(w[0]) + [dd_data.max()] #拼接出分割点
 #print(w)
 '''
 [0, 0.17869758895131088, 0.25772406433683875, 0.35184318136037063, 0.504]
@@ -88,7 +91,7 @@ def cluster_plot(d, k):
 	plt.ylim(-0.5,k-0.5)
 	plt.show()
 	return
-cluster_plot(d_w, k)
-cluster_plot(d_f, k)
-cluster_plot(d_c, k)
+cluster_plot(d_w, k) # 保存在data_discretization_1.png
+cluster_plot(d_f, k) # 保存在data_discretization_2.png
+cluster_plot(d_c, k) # 保存在data_discretization_3.png
 	

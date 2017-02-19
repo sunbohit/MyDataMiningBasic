@@ -1,15 +1,19 @@
+'''
+用sklearn进行PCA主成分分析降维
+'''
+
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
 
-input_file = 'principal_component.xls'
-output_file = 'principal_component_PCA.xls'
+input_file = 'principal_component.xls' #数据集
+output_file = 'principal_component_PCA.xls' #输出路径
 
 pc_data = pd.read_excel(input_file, header=None)
 pca_model = PCA()
-pca_model.fit(pc_data)
+pca_model.fit(pc_data) #训练PCA模型
 
-#print(pca_model.components_)
+#print(pca_model.components_) #输出特征向量
 '''
 [[ 0.56788461  0.2280431   0.23281436  0.22427336  0.3358618   0.43679539
    0.03861081  0.46466998]
@@ -28,19 +32,19 @@ pca_model.fit(pc_data)
  [-0.10147399  0.03937889  0.91023327 -0.18760016  0.06193777 -0.34598258
   -0.02090066  0.02137393]]
 '''
-#print(pca_model.explained_variance_ratio_)
+#print(pca_model.explained_variance_ratio_) #输出各个成分各自的方差百分比，也就是贡献率
 '''
 [  7.74011263e-01   1.56949443e-01   4.27594216e-02   2.40659228e-02
    1.50278048e-03   4.10990447e-04   2.07718405e-04   9.24594471e-05]
 '''
-#print(np.cumsum(pca_model.explained_variance_ratio_))
+#print(np.cumsum(pca_model.explained_variance_ratio_)) #计算累计贡献率
 '''
 [ 0.77401126  0.93096071  0.97372013  0.99778605  0.99928883  0.99969982
   0.99990754  1.        ]
 '''
-pca_3 = PCA(3)
+pca_3 = PCA(3) #选取前 3 个主成分进行计算 
 pca_3.fit(pc_data)
-pc_data_low = pca_3.transform(pc_data)
+pc_data_low = pca_3.transform(pc_data) #降维
 #print(type(pc_data_low))
 '''
 <class 'numpy.ndarray'>
@@ -63,7 +67,7 @@ pc_data_low = pca_3.transform(pc_data)
  [  5.99885871   4.19398863  -8.59953736]]
 '''
 pd.DataFrame(pc_data_low).to_excel(output_file)
-pc_data_re = pca_3.inverse_transform(pc_data_low)
+pc_data_re = pca_3.inverse_transform(pc_data_low) #尝试升维还原数据
 #print(pc_data_re)
 '''
 [[ 41.81945026  17.92938537   7.42743613   6.38423781   7.51911186

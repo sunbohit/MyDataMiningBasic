@@ -1,7 +1,11 @@
+'''
+数据归一化（规范化）
+'''
+
 import pandas as pd
 import numpy as np
 
-input_file = 'normalization_data.xls'
+input_file = 'normalization_data.xls' #数据集路径
 nd_data = pd.read_excel(input_file, header=None)
 
 print(nd_data)
