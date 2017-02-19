@@ -2,8 +2,8 @@
 pandas 可以读取excel文件，并自动生成数据的分析描述
 '''
 import pandas as pd
-datafile = 'catering_sale.xls'
-cs_data = pd.read_excel(datafile, index_col = '日期')
+datafile = 'catering_sale.xls' # 数据集路径
+cs_data = pd.read_excel(datafile, index_col = '日期') # 日期作为索引列
 print(cs_data.describe())
 '''
            销量

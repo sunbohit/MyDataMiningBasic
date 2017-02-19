@@ -1,3 +1,7 @@
+'''
+贡献度分析，又称帕累托分析。
+'''
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib

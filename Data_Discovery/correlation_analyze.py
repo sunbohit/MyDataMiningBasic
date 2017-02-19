@@ -1,9 +1,12 @@
+'''
+应用pandas进行相关性分析
+'''
 import pandas as pd
 
-inputfile = 'catering_sale_all.xls'
-csa_data = pd.read_excel(inputfile,index_col="日期")
+inputfile = 'catering_sale_all.xls' #数据集
+csa_data = pd.read_excel(inputfile,index_col="日期") #日期作为索引列
 
-print(csa_data.corr())
+print(csa_data.corr()) #pandas直接输出相关系数矩阵
 '''
            百合酱蒸凤爪    翡翠蒸香茜饺   金银蒜汁蒸排骨     乐膳真味鸡     蜜汁焗餐包      生炒菜心    铁板酸菜豆腐  \
 百合酱蒸凤爪   1.000000  0.009206  0.016799  0.455638  0.098085  0.308496  0.204898   
