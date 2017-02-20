@@ -1,3 +1,6 @@
+'''
+从excel中读取数据
+'''
 from openpyxl import load_workbook
 
 file = 'data.xlsx'
