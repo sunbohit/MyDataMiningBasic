@@ -1,26 +1,30 @@
+'''
+gensim的简单使用
+'''
 from gensim import corpora, models, similarities
 import jieba
 
+# 创建含有3个句子的语料库
 sentences = ["马上就到元旦了","香蕉是很好吃且含糖量很高的水果","它不喜欢吃普通的狗粮，它想吃水果"]
 
 words=[]
 for doc in sentences:
-	words.append(list(jieba.cut(doc)))
+	words.append(list(jieba.cut(doc))) # 应用jieba分词进行分词并存储为列表的形式
 print(words)
 '''
 [['马上', '就', '到', '元旦', '了'], ['香蕉', '是', '很', '好吃', '且', '含糖量', '很', '高', '的', '水果'], ['它', '不', '喜欢', '吃', '普通', '的', '狗', '粮', '，', '它', '想', '吃水果']]
 '''
 
-dic = corpora.Dictionary(words)
+dic = corpora.Dictionary(words) # 应用Dictionary函数建立词典
 print(dic)
 '''
 Dictionary(24 unique tokens: ['普通', '马上', '到', '狗', '不']...)
 '''
-print(dic.token2id)
+print(dic.token2id) # 应用token2id为词典中的词编号，保存为python字典的形式
 '''
 {'普通': 14, '马上': 2, '到': 4, '狗': 19, '不': 15, '好吃': 12, '了': 0, '想': 22, '元旦': 3, '高': 6, '，': 18, '的': 11, '它': 23, '是': 9, '吃': 20, '香蕉': 10, '喜欢': 21, '水果': 13, '很': 5, '粮': 16, '含糖量': 8, '且': 7, '吃水果': 17, '就': 1}
 '''
-for word,index in dic.token2id.items():
+for word,index in dic.token2id.items(): #输出字典
 	print(word," 编号为: ",index)
 '''
 普通  编号为:  14
@@ -49,20 +53,20 @@ for word,index in dic.token2id.items():
 就  编号为:  1
 '''
 print(type(dic)) #<class 'gensim.corpora.dictionary.Dictionary'>
-corpus = [dic.doc2bow(text) for text in words] #http://radimrehurek.com/gensim/corpora/dictionary.html
+corpus = [dic.doc2bow(text) for text in words] #http://radimrehurek.com/gensim/corpora/dictionary.html 用bag-of-words词袋模型处理列表中的每个句子（将词替换为id，并计数）
 print(corpus)
 '''
 [[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1)], [(5, 2), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1), (11, 1), (12, 1), (13, 1)], [(11, 1), (14, 1), (15, 1), (16, 1), (17, 1), (18, 1), (19, 1), (20, 1), (21, 1), (22, 1), (23, 2)]]
 '''
-tfidf = models.TfidfModel(corpus) #TF-IDF变换
+tfidf = models.TfidfModel(corpus) #http://radimrehurek.com/gensim/models/tfidfmodel.html 计算出TF-IDF模型
 
 vec = [(16, 1), (14, 1),(8,1),(10,1)]
-print(tfidf[vec])
+print(tfidf[vec]) #测试TF-IDF模型
 '''
 [(16, 0.5), (14, 0.5), (8, 0.5), (10, 0.5)]
 '''
 
-corpus_tfidf = tfidf[corpus]
+corpus_tfidf = tfidf[corpus] #TF-IDF变换，调整特征词的权值
 for doc in corpus_tfidf:
     print(doc)
 '''
@@ -75,7 +79,7 @@ for doc in corpus_tfidf:
 #sims = index[tfidf[vec]]
 #print(list(enumerate(sims)))
 
-lsi = models.LsiModel(corpus_tfidf, id2word=dic, num_topics=2) #LSI模型
+lsi = models.LsiModel(corpus_tfidf, id2word=dic, num_topics=2) #http://radimrehurek.com/gensim/models/lsimodel.html LSI模型，设定主题数为2
 lsiout=lsi.print_topics(2)
 print(lsiout[0])
 print(lsiout[1])
@@ -83,8 +87,8 @@ print(lsiout[1])
 (0, '0.421*"很" + 0.388*"它" + 0.211*"高" + 0.211*"且" + 0.211*"香蕉" + 0.211*"好吃" + 0.211*"水果" + 0.211*"是" + 0.211*"含糖量" + 0.194*"粮"')
 (1, '0.447*"就" + 0.447*"到" + 0.447*"元旦" + 0.447*"了" + 0.447*"马上" + -0.000*"它" + -0.000*"粮" + -0.000*"不" + -0.000*"吃" + -0.000*"想"')
 '''
-corpus_lsi = lsi[corpus_tfidf]
-for doc in corpus_lsi:
+corpus_lsi = lsi[corpus_tfidf] #用LSI模型转换原始文本
+for doc in corpus_lsi: 
 	print( doc )
 '''
 [(1, 1.0)]
@@ -92,7 +96,7 @@ for doc in corpus_lsi:
 [(0, 0.71107733974732845)]
 '''
 
-lda = models.LdaModel(corpus_tfidf, id2word=dic, num_topics=2) #LDA模型
+lda = models.LdaModel(corpus_tfidf, id2word=dic, num_topics=2) #http://radimrehurek.com/gensim/models/ldamodel.html LDA模型 主题数为2
 ldaOut=lda.print_topics(2)
 print(ldaOut[0])
 print(ldaOut[1])
