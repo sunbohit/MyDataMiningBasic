@@ -1,3 +1,7 @@
+'''
+gensim内置了多种语料库的保存格式
+'''
+
 from gensim import corpora
 
 corpus = [[(1, 0.5)], [(4, 0.3)], []]
@@ -18,7 +22,7 @@ print(list(corpus_2))
 '''
 [[(1, 0.5)], [(4, 0.3)], []]
 '''
-# 2 better
+# 2 对内存更友好
 for doc in corpus_2:
 	print(doc)
 '''

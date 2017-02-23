@@ -1,3 +1,7 @@
+'''
+将文本转化为向量
+'''
+
 from gensim import corpora
 
 documents = ["Human machine interface for lab abc computer applications",
@@ -13,10 +17,10 @@ documents = ["Human machine interface for lab abc computer applications",
 #stoplist = set('for a of the and to in')
 #print(stoplist) #{'r', 'h', 'n', 'd', ' ', 'f', 'e', 't', 'i', 'a', 'o'}
 
-stoplist = set('for a of the and to in'.split())
+stoplist = set('for a of the and to in'.split()) #设置停用词
 #print(stoplist) #{'in', 'of', 'the', 'and', 'a', 'to', 'for'}
 
-# remove common words and tokenize
+# 过滤掉停用词并将词语统一为小写的形式
 texts = [ [word for word in document.lower().split() if word not in stoplist] for document in documents]
 #print(texts)
 '''
@@ -31,9 +35,9 @@ texts = [ [word for word in document.lower().split() if word not in stoplist] fo
 	['graph', 'minors', 'survey']]
 '''
 
-# remove words that appear only once
+# 词频统计
 from collections import defaultdict
-frequency = defaultdict(int)
+frequency = defaultdict(int) #defaultdict(int)默认值是0
 for text in texts:
 	for token in text:
 		frequency[token] += 1
@@ -41,6 +45,7 @@ for text in texts:
 '''
 defaultdict(<class 'int'>, {'computer': 2, 'human': 2, 'trees': 3, 'engineering': 1, 'survey': 2, 'well': 1, 'system': 4, 'lab': 1, 'response': 2, 'binary': 1, 'applications': 1, 'widths': 1, 'random': 1, 'unordered': 1, 'user': 3, 'relation': 1, 'machine': 1, 'minors': 2, 'eps': 2, 'abc': 1, 'intersection': 1, 'measurement': 1, 'error': 1, 'management': 1, 'opinion': 1, 'interface': 2, 'graph': 3, 'quasi': 1, 'perceived': 1, 'testing': 1, 'paths': 1, 'ordering': 1, 'time': 2, 'generation': 1, 'iv': 1})
 '''
+# 过滤掉只出现了一次的词
 texts = [[token for token in text if frequency[token] > 1] for text in texts]
 #print(texts)
 '''
@@ -54,23 +59,23 @@ texts = [[token for token in text if frequency[token] > 1] for text in texts]
 	['graph', 'minors', 'survey']]
 '''
 
-#bag-of-words
-dictionary = corpora.Dictionary(texts)
+#bag-of-words词袋模型
+dictionary = corpora.Dictionary(texts) #建立词典
 #print(type(dictionary)) #<class 'gensim.corpora.dictionary.Dictionary'>
-dictionary.save('deerwester.dict')
+dictionary.save('deerwester.dict') #保存词典
 #print(dictionary) #Dictionary(12 unique tokens: ['computer', 'trees', 'survey', 'eps', 'system']...)
-#print(dictionary.token2id)
+#print(dictionary.token2id) #为词典中的词语编号
 '''
 {'minors': 11, 'time': 4, 'computer': 0, 'interface': 2, 'human': 1, 'survey': 5, 'trees': 9, 'user': 3, 'response': 7, 'system': 6, 'eps': 8, 'graph': 10}
 '''
-new_doc = "Human computer interaction"
+new_doc = "Human computer interaction" #新语料
 new_vec = dictionary.doc2bow(new_doc.lower().split())
-#print(new_vec)  # the word "interaction" does not appear in the dictionary and is ignored
+#print(new_vec)  # 新词"interaction"没有出现在词典中，直接忽略掉
 '''
 [(0, 1), (1, 1)]
 '''
-corpus = [dictionary.doc2bow(text) for text in texts]
-corpora.MmCorpus.serialize('deerwester.mm', corpus)  # store to disk, for later use
+corpus = [dictionary.doc2bow(text) for text in texts] # 用词袋模型处理整个语料库
+corpora.MmCorpus.serialize('deerwester.mm', corpus)  # 保存至磁盘
 #print(corpus)
 '''
 [	[(0, 1), (1, 1), (2, 1)], 
