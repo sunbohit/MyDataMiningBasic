@@ -9,7 +9,7 @@ mask='9s14s5s' #模板，对应每一行
 parse = struct.Struct(mask).unpack_from
 print('formatstring {!r}, record size: {}'.format(mask, struct.calcsize(mask)))
 
-datafile = 'fixed-width.data' #文件路径
+datafile = 'fixed_width.data' #文件路径
 
 with open(datafile, 'rb') as f: #需要以二进制形式打开文件
     for line in f:
