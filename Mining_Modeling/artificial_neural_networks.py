@@ -1,3 +1,7 @@
+"""
+用keras快速搭建简单的神经网络
+用sklearn画出混淆矩阵
+"""
 import pandas as pd
 import numpy as np
 from keras.models import Sequential

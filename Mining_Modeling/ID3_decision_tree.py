@@ -1,9 +1,12 @@
+'''
+用sklearn构建ID3决策树。
+'''
 import pandas as pd
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import export_graphviz
 
-input_file = 'sales_data.xls'
+input_file = 'sales_data.xls' #文件路径
 sd_data = pd.read_excel(input_file, index_col='序号')
 #print(sd_data)
 '''
@@ -53,8 +56,8 @@ sd_data[sd_data != 1 ] = -1
 34   1   -1    -1  -1
 '''
 
-feature = sd_data.iloc[:,:3].as_matrix()
-label = sd_data.iloc[:,3].as_matrix()
+feature = sd_data.iloc[:,:3].as_matrix() #特征
+label = sd_data.iloc[:,3].as_matrix() #标签
 #print(type(feature)) #<class 'numpy.ndarray'>
 #print(type(label)) #<class 'numpy.ndarray'>
 #print(type(label[0])) #<class 'int'>

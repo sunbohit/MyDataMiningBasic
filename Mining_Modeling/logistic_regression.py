@@ -1,3 +1,8 @@
+'''
+用sklearn进行logistic回归分析。
+并用递归特征消除和稳定性选择（随机logistic回归模型）进行特征筛选。
+'''
+
 import pandas as pd
  
 #http://scikit-learn.org/stable/modules/feature_selection.html#randomized-sparse-models
@@ -20,20 +25,21 @@ Index(['年龄', '教育', '工龄', '地址', '收入', '负债率', '信用卡
 '''
 features = b_data.iloc[:,:8]
 #print(type(features)) #<class 'pandas.core.frame.DataFrame'>
-features = features.as_matrix()
+features = features.as_matrix() #从pandas数据框转到numpy的ndarray
 #print(type(features)) #<class 'numpy.ndarray'>
 labels = b_data.iloc[:,8].as_matrix()
 
-randomized_logistic = RandomizedLogisticRegression()
-randomized_logistic.fit(features,labels)
-print(randomized_logistic.scores_)
+randomized_logistic = RandomizedLogisticRegression() #随机logistic回归模型，用于筛选变量
+randomized_logistic.fit(features,labels) #训练随机logistic回归模型
+print(randomized_logistic.scores_) #获取各个特征的分数
 '''
 [ 0.105  0.085  1.     0.425  0.     1.     0.545  0.03 ]
 '''
-print(randomized_logistic.get_support())
+print(randomized_logistic.get_support()) #随机logistic回归模型的筛选结果
 '''
 [False False  True  True False  True  True False]
 '''
+#随机logistic回归模型属于稳定性选择中的一种
 print('(稳定性选择)有效特征：%s'%','.join(b_data.columns[:-1][randomized_logistic.get_support()]))
 '''
 (稳定性选择)有效特征：工龄,地址,负债率,信用卡负债
